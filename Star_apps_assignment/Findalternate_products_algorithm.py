@@ -4,8 +4,8 @@ from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 import json
 
-
-def FindAlternateGroups(store_domain):
+# Define the function to find alternates
+def FindAlternateGroups(store_domain):                
     # Make a request to the store domain
     response = requests.get(store_domain+ '/products.json')
 
@@ -16,7 +16,7 @@ def FindAlternateGroups(store_domain):
     for product in data['products']:
         urls.append(store_domain + '/products/' + product['handle'])
 
-    # Parse the HTML of each product page and extract the product names
+    # extract texts from "title"
     names = []
     for product in data["products"]:
         title = product["title"]
@@ -25,7 +25,7 @@ def FindAlternateGroups(store_domain):
 
 
     # Use K-means clustering to group the product URLs by name similarity
-    vectorizer = TfidfVectorizer(stop_words='english')
+    vectorizer = TfidfVectorizer(stop_words='english')    #TF-idf vectorizer to measure originality of word
     X = vectorizer.fit_transform(names)
     kmeans = KMeans(n_clusters=5, n_init=10)
     kmeans.fit(X)
@@ -41,7 +41,7 @@ def FindAlternateGroups(store_domain):
 
 
 
-    # convert the dictionary to JSON format with new line separators
+    # convert the dictionary to JSON format 
     json_result = json.dumps(groups, indent=6, separators=(',', ':'),sort_keys=True)
 
     # save the JSON string to a file
