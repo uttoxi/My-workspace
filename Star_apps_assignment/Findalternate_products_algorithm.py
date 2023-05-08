@@ -16,7 +16,7 @@ def FindAlternateGroups(store_domain):
     for product in data['products']:
         urls.append(store_domain + '/products/' + product['handle'])
 
-    # Parse the HTML of each product page and extract the product names
+    # Parse the HTML of each product page and extract the product names,catagory,tags
     names = []
     catagory =[]
     tags = []
@@ -54,8 +54,8 @@ def FindAlternateGroups(store_domain):
 
 
 
-    # convert the dictionary to JSON format with new line separators
-    #json_object=json.dumps(groups, indent=6, separators=(',', ':'),sort_keys=True)
+    # Remove keys with length= 1, convert the dictionary to JSON format with new line separators
+   
     for key in list(groups.keys()):
         # Check the length of the value
         if len(groups[key]) == 1:
@@ -63,8 +63,8 @@ def FindAlternateGroups(store_domain):
             del groups[key]
     json_result = json.dumps(groups, indent=6, separators=(',', ':'),sort_keys=True)
 
-    # save the JSON string to a file
-    with open('Alternate2.json', 'w') as f:
+    # save the JSON string to a json file
+    with open('Alternate1.json', 'w') as f:
         f.write(json_result)
 
     # Convert the groups dictionary to a JSON object and return it
